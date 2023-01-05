@@ -10,21 +10,23 @@ export default function Header() {
   const handleChange = (e) => setText(e.target.value);
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 라우트 경로로 submit 이벤트 발생 , 작성한 콘텐츠는 일부로 남겨 둘 거야!
+    // 라우트 경로로 submit 이벤트 발생
     navigate(`/videos/${text}`);
   };
 
-  //
+  // input창에 새로고침을 해도 keyword가 남도록 기능 구현
+  // useEffect 특성 상 특정 값이 변경 될 때만 렌더링
   useEffect(() => setText(keyword || ''), [keyword]);
 
   return (
-    <header>
-      <Link to='/'>
-        <BsYoutube />
-        <h1>Youtube</h1>
+    <header className='w-full flex p-4 text-2xl border-b border-zinc-600 mb-4'>
+      <Link to='/' className='flex items-center'>
+        <BsYoutube className='text-4xl text-brand' />
+        <h1 className='font-bold ml-2 text-3xl'>Youtube</h1>
       </Link>
-      <form onSubmit={handleSubmit}>
+      <form className='w-full flex justify-center' onSubmit={handleSubmit}>
         <input
+          className='w-7/12 p-2 outline-none bg-black text-gray-50'
           id='search'
           type='text'
           placeholder='search...'
@@ -32,7 +34,7 @@ export default function Header() {
           onChange={handleChange}
         />
         <label htmlFor='search' id='search'></label>
-        <button>
+        <button className='bg-zinc-600 px-4'>
           <BsSearch />
         </button>
       </form>
