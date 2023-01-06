@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
+import axios from 'axios';
 
 export default function Videos() {
   const { keyword } = useParams();
@@ -17,11 +18,13 @@ export default function Videos() {
     queryKey: ['videos', keyword],
     queryFn: async () => {
       // 경로에 대해서 자세하게 살펴볼 필요가 있다!
-      return fetch(
-        `/data/${keyword ? 'list-by-keyword' : 'list-by-popular'}.json`,
-      )
-        .then((res) => res.json())
-        .then((data) => data.items);
+      return axios
+        .get(`/data/${keyword ? 'list-by-keyword' : 'list-by-popular'}.json`)
+        .then((res) => {
+          console.log(res);
+          console.log(res.data.items);
+          return res.data.items;
+        });
     },
   });
 
