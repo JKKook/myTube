@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
-import axios from 'axios';
+import FakeYoutube from '../api/fake-youtube';
 
 export default function Videos() {
   const { keyword } = useParams();
@@ -16,15 +16,9 @@ export default function Videos() {
   } = useQuery({
     // key : videos , variable : keyword
     queryKey: ['videos', keyword],
-    queryFn: async () => {
-      // 경로에 대해서 자세하게 살펴볼 필요가 있다!
-      return axios
-        .get(`/data/${keyword ? 'list-by-keyword' : 'list-by-popular'}.json`)
-        .then((res) => {
-          console.log(res);
-          console.log(res.data.items);
-          return res.data.items;
-        });
+    queryFn: () => {
+      const youtube = new FakeYoutube();
+      return youtube.search(keyword);
     },
   });
 
