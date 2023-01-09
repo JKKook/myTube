@@ -15,8 +15,8 @@ export function YoutubeApiProvider({ children }) {
   );
 }
 // client 정의 (실제 유튜브 API, MockData)
-export const client = new YoutubeClient();
-// export const client = new FakeYoutubeClient();  // Mock data
+// export const client = new YoutubeClient();
+export const client = new FakeYoutubeClient(); // Mock data
 export const youtube = new Youtube(client);
 
 // context 로직 사용
