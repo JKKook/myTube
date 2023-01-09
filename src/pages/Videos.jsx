@@ -26,7 +26,9 @@ export default function Videos() {
       {isLoading && <p>Loading...</p>}
       {error && <p>Something is wrong</p>}
       {videos && (
-        <ul>
+        // grid 형태로 반응형 화면이 작을 땐 col-1, sm사이즈 넘어가면 col-2, lg사이즈는 col-3, xl사이즈는 col-4
+        // gap은 2, 수직은 4
+        <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 gap-y-4'>
           {videos.map((video) => (
             <VideoCard key={video.id} video={video} />
           ))}
