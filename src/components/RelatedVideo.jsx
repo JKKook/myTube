@@ -1,7 +1,7 @@
 import React from 'react';
 import { useYoutubeApi } from '../context/youtubeApiContext';
 import { useQuery } from '@tanstack/react-query';
-import VideoCard from '../components/VideoCard';
+import RelatedCard from './RelatedCard';
 
 export default function RelatedVideo({ channelId }) {
   const { youtube } = useYoutubeApi();
@@ -9,18 +9,26 @@ export default function RelatedVideo({ channelId }) {
     isLoading,
     error,
     data: videos,
-  } = useQuery({
-    queryKey: ['related', channelId],
-    queryFn: () => youtube.relatedVideo(channelId),
-  });
+  } = useQuery(['related', channelId], () => youtube.relatedVideo(channelId));
   return (
     <>
       {isLoading && <p>Loading...</p>}
       {error && <p>Something is wrong</p>}
       {videos && (
         <ul>
+          <div>
+            <button className='bg-zinc-800 rounded-xl p-2 text-sm ml-4'>
+              모두
+            </button>
+            <button className='bg-zinc-800 rounded-xl p-2 text-sm ml-2'>
+              관련 콘텐츠
+            </button>
+            <button className='bg-zinc-800 rounded-xl p-2 text-sm ml-2'>
+              최근에 업로드된 동영상
+            </button>
+          </div>
           {videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
+            <RelatedCard key={video.id} video={video} type='list' />
           ))}
         </ul>
       )}

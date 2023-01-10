@@ -19,42 +19,35 @@ export default class Youtube {
 
   // RelatedVideo
   async relatedVideo(id) {
-    return (
-      this.apiClient
-        .search({
-          params: {
-            part: 'snippet',
-            maxResults: 25,
-            type: 'video',
-            // query대신, 연관된 비디오 아이디 값 필요, 공식홈페이지 참고
-            relatedToVideoId: id,
-          },
-        })
-        .then((res) => res.data.items)
-        //   items의 id는 객체로 포함되어 있고, id안에 videoId가 실질적인 id 역할
-        .then((items) =>
-          items.map((item) => ({ ...item, id: item.id.videoId })),
-        )
-    );
+    return this.apiClient
+      .search({
+        params: {
+          part: 'snippet',
+          maxResults: 25,
+          type: 'video',
+          // query대신, 연관된 비디오 아이디 값 필요, 공식홈페이지 참고
+          relatedToVideoId: id,
+        },
+      })
+      .then((res) =>
+        res.data.items.map((item) => ({ ...item, id: item.id.videoId })),
+      );
   }
 
   async #searchByKeyword(keyword) {
-    return (
-      this.apiClient
-        .search({
-          params: {
-            part: 'snippet',
-            maxResults: 25,
-            type: 'video',
-            q: keyword,
-          },
-        })
-        .then((res) => res.data.items)
-        //   items의 id는 객체로 포함되어 있고, id안에 videoId가 실질적인 id 역할
-        .then((items) =>
-          items.map((item) => ({ ...item, id: item.id.videoId })),
-        )
-    );
+    return this.apiClient
+      .search({
+        params: {
+          part: 'snippet',
+          maxResults: 25,
+          type: 'video',
+          q: keyword,
+        },
+      })
+      .then((res) =>
+        res.data.items.map((item) => ({ ...item, id: item.id.videoId })),
+      )
+      .catch((error) => console.log(error.res));
   }
 
   async #searchByPopular() {
@@ -66,6 +59,7 @@ export default class Youtube {
           chart: 'mostPopular',
         },
       })
-      .then((res) => res.data.items);
+      .then((res) => res.data.items)
+      .catch((error) => console.log(error.response));
   }
 }

@@ -14,15 +14,14 @@ export default function Videos() {
     // videos 배열에 관심
     data: videos,
     // useQuery cache
-  } = useQuery({
+  } = useQuery(
     // key : videos , variable : keyword
-    queryKey: ['videos', keyword],
-    queryFn: () => youtube.search(keyword),
-  });
+    ['videos', keyword],
+    () => youtube.search(keyword),
+  );
 
   return (
     <>
-      <div>Videos {keyword ? `🔎${keyword}` : 'keyword nothing 😋'}</div>
       {isLoading && <p>Loading...</p>}
       {error && <p>Something is wrong</p>}
       {videos && (
@@ -30,7 +29,9 @@ export default function Videos() {
         // gap은 2, 수직은 4
         <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 gap-y-4'>
           {videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
+            <>
+              <VideoCard key={video.id} video={video} />
+            </>
           ))}
         </ul>
       )}
