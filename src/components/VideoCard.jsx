@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 export default function VideoCard({ video, type }) {
   const { title, thumbnails, channelTitle, publishedAt, channelId } =
     video.snippet;
-
   // 비디오 리스트 클릭 시, watch/Detail 경로로 보내기
   const navigate = useNavigate();
   const handleClick = () =>
@@ -17,17 +16,20 @@ export default function VideoCard({ video, type }) {
   const isList = type === 'list';
   //
   const { youtube } = useYoutubeApi();
-  const { data: url } = useQuery({
-    queryKey: ['channel', channelId],
-    queryFn: () => youtube.channelImageURL(channelId),
-  });
+  const { data: url } = useQuery(
+    {
+      queryKey: ['channel', channelId],
+      queryFn: () => youtube.channelImageURL(channelId),
+    },
+    { staleTime: 5 * 60 * 1000 },
+  );
 
   return (
     <>
       <li className={isList ? 'flex gap-1 ml-2' : ''} onClick={handleClick}>
         <img
           className={
-            isList ? 'w-52 m-2 rounded-md' : 'w-80 h-40 ml-4 rounded-md'
+            isList ? 'w-52 m-2 rounded-md' : 'w-80 h-42 ml-4 rounded-md'
           }
           src={thumbnails.medium.url}
           alt={title}
@@ -46,7 +48,7 @@ export default function VideoCard({ video, type }) {
             <p className='ml-4 text-sm font-semibold my-2 line-clamp-2'>
               {title}
             </p>
-            <p className='ml-4 text-sm opacity-80'>{channelTitle}</p>
+            <p className='ml-4 text-xs opacity-80'>{channelTitle}</p>
             <p className='ml-4 text-xs opacity-60'>
               {formatAgo(publishedAt, 'ko')}
             </p>

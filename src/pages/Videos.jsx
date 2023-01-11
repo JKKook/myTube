@@ -7,7 +7,6 @@ import { youtube } from '../context/youtubeApiContext';
 
 export default function Videos() {
   const { keyword } = useParams();
-
   const {
     isLoading,
     error,
@@ -15,9 +14,11 @@ export default function Videos() {
     data: videos,
     // useQuery cache
   } = useQuery(
-    // key : videos , variable : keyword
-    ['videos', keyword],
-    () => youtube.search(keyword),
+    {
+      queryKey: ['videos', keyword],
+      queryFn: () => youtube.search(keyword),
+    },
+    { staleTime: 1 * 60 * 1000 },
   );
 
   return (
@@ -30,7 +31,7 @@ export default function Videos() {
         <ul className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 gap-y-4'>
           {videos.map((video) => (
             <>
-              <VideoCard key={video.id} video={video} />
+              <VideoCard video={video} key={video.id} />
             </>
           ))}
         </ul>

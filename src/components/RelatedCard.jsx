@@ -8,6 +8,7 @@ export default function RelatedCard({ video, type }) {
   const handleClick = () =>
     navigate(`/videos/watch/${video.id}`, { state: { video } });
   const isList = type === 'list';
+  //
 
   return (
     <>

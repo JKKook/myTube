@@ -21,12 +21,12 @@ export default function Header() {
   return (
     <header className='w-full flex p-4 text-2xl border-b border-zinc-600 mb-4'>
       <Link to='/' className='flex items-center'>
-        <BsYoutube className='text-4xl text-brand' />
+        <BsYoutube className='ml-4 text-4xl text-brand' />
         <h1 className='font-bold ml-2 text-3xl'>Youtube</h1>
       </Link>
-      <form className='w-full flex justify-center' onSubmit={handleSubmit}>
+      <form className='w-full h-10 flex justify-center' onSubmit={handleSubmit}>
         <input
-          className='w-7/12 p-2 outline-none bg-black text-gray-50'
+          className='w-7/12 p-2 outline-none rounded-l-2xl bg-black text-gray-50 text-base pl-4'
           id='search'
           type='text'
           placeholder='search...'
@@ -34,7 +34,7 @@ export default function Header() {
           onChange={handleChange}
         />
         <label htmlFor='search' id='search'></label>
-        <button className='bg-zinc-600 px-4'>
+        <button className='bg-zinc-600 px-4 rounded-r-2xl'>
           <BsSearch />
         </button>
       </form>

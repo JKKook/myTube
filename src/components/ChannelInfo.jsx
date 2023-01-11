@@ -8,14 +8,15 @@ export default function ChannelInfo({ channelId, channelTitle }) {
     isLoading,
     error,
     data: url,
-  } = useQuery({
-    queryKey: ['channel', channelId],
-    queryFn: () => youtube.channelImageURL(channelId),
-  });
+  } = useQuery(
+    ['channel', channelId],
+    () => youtube.channelImageURL(channelId),
+    { staleTime: 5 * 60 * 1000 },
+  );
   return (
     <div className='flex my-4 mb-8 items-center'>
       {isLoading && <p>Loading...</p>}
-      {error && <p>Something is wrong</p>}
+      {error && <p>{error.messages}</p>}
       {url && (
         <img className='w-10 h-10 rounded-full' src={url} alt={channelTitle} />
       )}
