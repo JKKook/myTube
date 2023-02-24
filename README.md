@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# react youtube clone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+https://gilded-tiramisu-d388f7.netlify.app/
 
-## Available Scripts
+### 들어가며
 
-In the project directory, you can run:
+프로젝트를 작업하게 된 이유는 그 동안 리액트 지식을 바탕으로 API를 활용하고자 진행하게 되었습니다.
 
-### `yarn start`
+### Youtube API 정리
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **키워드 검색**
+  https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=surfing&key=[YOUR_API_KEY]
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  <br>
 
-### `yarn test`
+- **핫트렌드 비디오들**
+  https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=[YOUR_API_KEY]
+  <br>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **연관된 비디오 검색**
+  https://youtube.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=Ks-_Mh1QhMc&type=video&maxResults=25&key=[YOUR_API_KEY]
+  <br>
 
-### `yarn build`
+- **채널 상세내용**
+  https://youtube.googleapis.com/youtube/v3/channels?part=snippet&id=UC_x5XG1OV2P6uZZ5FSM9Ttw&key=[YOUR_API_KEY]
+  <br>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### UI 구조 및 경로
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+video의 최상위 컴포넌트는 root가 담당하며,
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- index true인 경우 videos
+- videos/:keyword ⇒ videos
+- videos/watch/:videoId ⇒ videosDetail
 
-### `yarn eject`
+### 프로젝트 특징
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+유튜브 클론 프로젝트의 특징은, 실제 유튜브 API와 샘플인 데이터 즉 만들어진 가짜 API의 혼용을 하면서 작업할 수 있다는 점입니다.
+위 과정을 하기 위해서 실제와 가짜 데이터 동시에 관리할 수 있어야 합니다.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 배웠던 문제 해결 방법
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+API의 전체적인 관리를 위해서 Context를 활용하는데, 이 때 생기는 의존성주입에 대한 이슈 해결입니다.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. 비슷한 관심사라면 함께 두기
+   : 비슷한 관심사 즉 깊은 의존성을 지닌 것들끼리는 한 폴더에 관리하는 것이 효율적이다. (이러한 습관들은 스파게티 코드로 인한 오류를 방지할 가능성이 농후하다)
+2. 데이터를 ID기반으로 정리하기
+   : Client에서 데이터를 ID를 기반으로해서 관리 시, 큰 이점이 있다. 바로 상위 컴포넌트에서 해당 데이터의 \*[스키마](https://itwiki.kr/w/%EC%8A%A4%ED%82%A4%EB%A7%88)(Constructor of DataBase)를 알 필요가 없고, ID만 내려주면 하위 컴포넌트가 원하는 데이터에 바로 접근할 수 있다는 점이다.
+3. 의존성 그대로 드러내기
+   : 의존성을 prop 구조에 그대로 드러내면, 컴포넌트 의존 구조가 명확히 보이고 어떻게 의존성을 느슨하게 만들어야 하는지 눈에 보인다. 그래서 의존 관계를 prop 구조나 이름에 그대로 드러내는 것이 좋다.
