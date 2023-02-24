@@ -2,6 +2,8 @@
 
 https://gilded-tiramisu-d388f7.netlify.app/
 
+<img src='./public/asset/myyoutube.gif'>
+
 ### 들어가며
 
 프로젝트를 작업하게 된 이유는 그 동안 리액트 지식을 바탕으로 API를 활용하고자 진행하게 되었습니다.
