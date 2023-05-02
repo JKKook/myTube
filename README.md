@@ -12,7 +12,6 @@ https://gilded-tiramisu-d388f7.netlify.app/
 
 - **키워드 검색**
   https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=surfing&key=[YOUR_API_KEY]
-
   <br>
 
 - **핫트렌드 비디오들**
