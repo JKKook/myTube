@@ -34,7 +34,7 @@ export default function VideoCard({ video, type }) {
                     className={
                         isList
                             ? 'w-52 m-2 rounded-md'
-                            : 'w-80 h-42 ml-4 rounded-md'
+                            : 'w-[350px] h-42 ml-4 rounded-md'
                     }
                     src={thumbnails.medium.url}
                     alt={title}
@@ -49,7 +49,7 @@ export default function VideoCard({ video, type }) {
                             />
                         )}
                     </div>
-                    <div className='flex flex-col basis-4/6'>
+                    <div className='flex flex-col basis-4/6 max-w-[330px]'>
                         <p className='ml-4 text-sm font-semibold my-2 line-clamp-2'>
                             {title}
                         </p>

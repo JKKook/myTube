@@ -46,12 +46,14 @@ export default function Header() {
                         <BsSearch />
                     </button>
                 </div>
-                <div className='flex flex-col text-3xl'>
-                    <button>
-                        <AiOutlineUser />
-                    </button>
-                    <span className='text-xs'>로그인</span>
-                </div>
+                <Link to='/login'>
+                    <div className='flex flex-col text-3xl'>
+                        <button>
+                            <AiOutlineUser />
+                        </button>
+                        <span className='text-xs'>로그인</span>
+                    </div>
+                </Link>
             </form>
         </header>
     );
