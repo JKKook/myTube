@@ -8,11 +8,11 @@ export const YoutubeApiContext = createContext();
 
 // provider
 export function YoutubeApiProvider({ children }) {
-  return (
-    <YoutubeApiContext.Provider value={{ youtube }}>
-      {children}
-    </YoutubeApiContext.Provider>
-  );
+    return (
+        <YoutubeApiContext.Provider value={{ youtube }}>
+            {children}
+        </YoutubeApiContext.Provider>
+    );
 }
 // client 정의 (실제 유튜브 API, MockData)
 const client = new YoutubeClient();
@@ -21,5 +21,5 @@ export const youtube = new Youtube(client);
 
 // context 로직 사용
 export function useYoutubeApi() {
-  return useContext(YoutubeApiContext);
+    return useContext(YoutubeApiContext);
 }
