@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BsYoutube, BsSearch } from 'react-icons/bs';
 import { FaRegLaughBeam } from 'react-icons/fa';
+import { AiOutlineUser } from 'react-icons/ai';
 
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
@@ -28,21 +29,29 @@ export default function Header() {
                 <FaRegLaughBeam className='ml-2 mb-4 text-2xl text-yellow-500 animate-spin' />
             </Link>
             <form
-                className='w-full h-10 flex justify-center'
+                className='w-full h-10 flex justify-between'
                 onSubmit={handleSubmit}
             >
-                <input
-                    className='w-7/12 p-2 outline-none rounded-l-2xl bg-black text-gray-50 text-base pl-4'
-                    id='search'
-                    type='text'
-                    placeholder='search...'
-                    value={text}
-                    onChange={handleChange}
-                />
-                <label htmlFor='search' id='search'></label>
-                <button className='bg-zinc-600 px-4 rounded-r-2xl'>
-                    <BsSearch />
-                </button>
+                <div className='flex ml-80'>
+                    <input
+                        className='w-[450px] p-2 outline-none rounded-l-2xl bg-black text-gray-50 text-base pl-4'
+                        id='search'
+                        type='text'
+                        placeholder='search...'
+                        value={text}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor='search' id='search'></label>
+                    <button className='bg-zinc-600 px-4 text-xl rounded-r-2xl hover:bg-indigo-500'>
+                        <BsSearch />
+                    </button>
+                </div>
+                <div className='flex flex-col text-3xl'>
+                    <button>
+                        <AiOutlineUser />
+                    </button>
+                    <span className='text-xs'>로그인</span>
+                </div>
             </form>
         </header>
     );
