@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { BsGoogle, BsGithub } from 'react-icons/bs';
 
 export default function SignIn() {
     const [signForm, setSignForm] = useState({ email: '', password: '' });
@@ -62,13 +63,31 @@ export default function SignIn() {
                             onChange={handleSignInValue}
                         />
                     </div>
+                    <div>
+                        <p className='text-gray-700 font-semibold mt-8 mb-2 '>
+                            소셜 로그인
+                        </p>
+                        <button className='p-4 text-2xl bg-red-500 rounded mr-4 transform hover:scale-105 transition duration-300'>
+                            <BsGoogle />
+                        </button>
+                        <button className='p-4 text-2xl bg-gray-500 rounded transform hover:scale-105 transition duration-300'>
+                            <BsGithub />
+                        </button>
+                    </div>
                     <div className='flex justify-end'>
                         <button
                             type='submit'
-                            className='bg-indigo-500 font-bold text-white py-2 px-4 rounded hover:bg-indigo-600'
+                            className='mt-12 bg-indigo-500 font-bold text-white py-2 px-4 rounded hover:bg-indigo-600'
                         >
                             시작하기
                         </button>
+                    </div>
+                    <div className='text-gray-800'>
+                        <span>이용이 처음이신가요?</span>
+                        {/* register routing */}
+                        <span className='ml-2 cursor-pointer font-semibold text-indigo-900 hover:text-gray-600'>
+                            처음 시작하기
+                        </span>
                     </div>
                 </form>
             </div>
