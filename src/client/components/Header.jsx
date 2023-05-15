@@ -32,7 +32,7 @@ export default function Header() {
                 className='w-full h-10 flex justify-between'
                 onSubmit={handleSubmit}
             >
-                <div className='flex ml-80'>
+                <div className='flex ml-4'>
                     <input
                         className='w-[450px] p-2 outline-none rounded-l-2xl bg-black text-gray-50 text-base pl-4'
                         id='search'
