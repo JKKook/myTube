@@ -51,6 +51,34 @@ app.post('/users/register', async (req, res) => {
 // POST 로그인 페이지
 app.post('/users/login', async (req, res) => {
     console.log('request', req.body);
+
+    try {
+        // 1. 요청 된 이메일을 데이터베이스에서 찾기
+        const userEmail = await Logins.findOne({ email: req.body.email });
+        // 1-1 이메일 모델 저장
+        const isEmail = await userEmail.save();
+
+        if (!isEmail) {
+            return res.json({
+                loginStatus: false,
+                message: '이메일이 존재하지 않습니다',
+            });
+        } else {
+            // 2. 이메일을 데이터베이스에서 찾았다면 비밀번호 비교
+            // 스키마 모델에서 비밀번호 비교 메서드 생성하자
+            userEmail.comparePassword(+req.body.password, (isMatch) => {
+                console.log('plainPassword', req.body.password);
+                if (!isMatch) {
+                    return res.json({
+                        loginStatus: false,
+                        message: '비밀번호가 일치하지 않습니다',
+                    });
+                } else {
+                    // 3. 비밀번호가 일치하다면 JWT 토큰 생성
+                }
+            });
+        }
+    } catch (error) {}
 });
 
 app.listen(PORT, () => {
