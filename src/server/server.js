@@ -23,6 +23,28 @@ mongoose
         console.log(err);
     });
 
+// import Schemas
+const { Logins } = require('./model/loginSchemas');
+
+// POST
+app.post('/login', async (req, res) => {
+    try {
+        // client에서 로그인 정보 가져오기
+        const loginInfo = new Logins(req.body);
+        // client에서 받아온 로그인 정보 정보
+        const loggedStatus = await loginInfo.save();
+
+        if (!loggedStatus) {
+            const error = new Error('POST 요청이 실패했습니다');
+            return res.status(400).json({ success: 'something wrong', error });
+        }
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        res.status(500).send(err);
+        console.log(`문법에 오류가 있군요!`);
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Sever is running on port ${PORT}`);
 });
