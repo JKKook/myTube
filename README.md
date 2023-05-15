@@ -1,4 +1,11 @@
-# react youtube clone
+# myTube
+
+### 리뉴얼 작업 중
+
+1. 로그인 인증(JWT)
+2. 나만의 리스트 페이지(동영상)
+3. 나만의 리스트 페이지(음악)
+4. 챗봇서비스(GPT)
 
 https://gilded-tiramisu-d388f7.netlify.app/
 
