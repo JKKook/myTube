@@ -1,12 +1,16 @@
+import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
 import { BsGoogle, BsGithub } from 'react-icons/bs';
+
+const SERVER_URL = 'http://localhost:8005/login';
 
 export default function SignIn() {
     const [signForm, setSignForm] = useState({ email: '', password: '' });
     // console.log(signForm); // 나중에 디바운스 리팩터링 해야해!!
 
     // signIn *실제 데이터는 백엔드에서 받아 올 것임!
+
     const handleSignInValue = (e) => {
         // input name
         const { name, value } = e.target;
@@ -14,10 +18,22 @@ export default function SignIn() {
         setSignForm({ ...signForm, [name]: value });
     };
 
-    const handleSignInSubmit = (e) => {
+    const handleSignInSubmit = async (e) => {
         e.preventDefault();
-        // console.log(signForm.email);
-        // console.log(signForm.password);
+
+        const requestData = {
+            email: signForm.email,
+            password: signForm.password,
+        };
+
+        try {
+            const response = await axios.post(SERVER_URL, requestData);
+            console.log('responseData', response);
+        } catch (error) {
+            console.log(`클라이언트에서 request 요청이 실패했습니다 ${error}`);
+        }
+
+        setSignForm({ email: '', password: '' });
     };
 
     return (
@@ -28,6 +44,8 @@ export default function SignIn() {
                     <em className='text-xl'>마이튜브 계속 이동</em>
                 </div>
                 <form
+                    action='/login'
+                    method='POST'
                     className='max-w-[500px] bg-gray-200 p-8 rounded shadow-md w-7/12 '
                     onSubmit={handleSignInSubmit}
                 >
@@ -42,7 +60,7 @@ export default function SignIn() {
                             type='email'
                             id='email'
                             name='email'
-                            className='w-full py-2 px-4 border border-gray-300 rounded focus:outline-none focus:border-indigo-500'
+                            className='w-full py-2 px-4 border border-gray-300 text-gray-700 rounded focus:outline-none focus:border-indigo-500'
                             defaultValue={signForm.email}
                             onChange={handleSignInValue}
                         />
@@ -58,7 +76,7 @@ export default function SignIn() {
                             type='password'
                             id='password'
                             name='password'
-                            className='w-full py-2 px-4 border border-gray-300 rounded focus:outline-none focus:border-indigo-500'
+                            className='w-full py-2 px-4 border border-gray-300 text-gray-900 rounded focus:outline-none focus:border-indigo-500'
                             defaultValue={signForm.password}
                             onChange={handleSignInValue}
                         />

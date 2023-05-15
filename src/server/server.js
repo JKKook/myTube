@@ -31,6 +31,7 @@ app.post('/login', async (req, res) => {
     try {
         // client에서 로그인 정보 가져오기
         const loginInfo = new Logins(req.body);
+        console.log('loginInfo:', loginInfo);
         // client에서 받아온 로그인 정보 정보
         const loggedStatus = await loginInfo.save();
 
