@@ -10,18 +10,25 @@ export default function SignIn() {
     // console.log(signForm); // 나중에 디바운스 리팩터링 해야해!!
 
     // signIn *실제 데이터는 백엔드에서 받아 올 것임!
-
     const handleSignInValue = (e) => {
         // input name
         const { name, value } = e.target;
         // console.log(e.target.name);
-        setSignForm({ ...signForm, [name]: value });
+        // setSignForm({ ...signForm, [name]: value });
+
+        // ** BUG : input value가 submit했음에도 초기화 되지 않음
+        // ** DEBUG setState 동기적인 처리
+        setSignForm((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
     };
 
     const handleSignInSubmit = async (e) => {
         e.preventDefault();
 
         const requestData = {
+            // model에 들어가기 때문에 변수 값을 동일하게 맞춰야 함!
             email: signForm.email,
             password: signForm.password,
         };
@@ -61,7 +68,7 @@ export default function SignIn() {
                             id='email'
                             name='email'
                             className='w-full py-2 px-4 border border-gray-300 text-gray-700 rounded focus:outline-none focus:border-indigo-500'
-                            defaultValue={signForm.email}
+                            value={signForm.email}
                             onChange={handleSignInValue}
                         />
                     </div>
@@ -77,7 +84,7 @@ export default function SignIn() {
                             id='password'
                             name='password'
                             className='w-full py-2 px-4 border border-gray-300 text-gray-900 rounded focus:outline-none focus:border-indigo-500'
-                            defaultValue={signForm.password}
+                            value={signForm.password}
                             onChange={handleSignInValue}
                         />
                     </div>
