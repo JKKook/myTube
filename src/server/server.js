@@ -15,6 +15,8 @@ mongoose
     .connect(process.env.MONGO_ATLAS_URL, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
     })
     .then(() => {
         console.log('monogoose connect..');
@@ -26,8 +28,8 @@ mongoose
 // import Schemas
 const { Logins } = require('./model/loginSchemas');
 
-// POST
-app.post('/login', async (req, res) => {
+// POST 회원가입 페이지
+app.post('/users/register', async (req, res) => {
     try {
         // client에서 로그인 정보 가져오기
         const loginInfo = new Logins(req.body);
@@ -44,6 +46,11 @@ app.post('/login', async (req, res) => {
         res.status(500).send(err);
         console.log(`문법에 오류가 있군요!`);
     }
+});
+
+// POST 로그인 페이지
+app.post('/users/login', async (req, res) => {
+    console.log('request', req.body);
 });
 
 app.listen(PORT, () => {
