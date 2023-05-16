@@ -51,7 +51,7 @@ export default function SignIn() {
                     <em className='text-xl'>마이튜브 계속 이동</em>
                 </div>
                 <form
-                    action='/login'
+                    action='/users/login'
                     method='POST'
                     className='max-w-[500px] bg-gray-200 p-8 rounded shadow-md w-7/12 '
                     onSubmit={handleSignInSubmit}

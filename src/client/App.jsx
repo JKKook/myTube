@@ -6,6 +6,7 @@ import VideoDetail from './pages/VideoDetail';
 import NotFound from './pages/NotFound';
 import Root from './pages/Root';
 import Auth from './pages/Auth';
+import RegisterPage from './pages/RegisterPage';
 
 export default function App() {
     return <RouterProvider router={router} />;
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
         errorElement: <NotFound />,
         children: [
             { index: true, element: <Videos /> },
-            { path: 'login', element: <Auth /> },
+            { path: 'users/login', element: <Auth /> },
+            { path: 'users/register', element: <RegisterPage /> },
             { path: 'videos', element: <Videos /> },
             { path: 'videos/:keyword', element: <Videos /> },
             { path: 'videos/watch/:videoId', element: <VideoDetail /> },
