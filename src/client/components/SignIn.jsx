@@ -3,14 +3,17 @@ import React from 'react';
 // import { useState } from 'react';
 import { BsGoogle, BsGithub } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
-import { userFormState } from '../recoil/recoil-auth';
-import { Link } from 'react-router-dom';
+import { userAuthState, userFormState } from '../recoil/recoil-auth';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SERVER_URL = 'http://localhost:8005/users/login';
 
 export default function SignIn() {
     const [signForm, setSignForm] = useRecoilState(userFormState);
     // console.log(signForm); // 나중에 디바운스 리팩터링 해야해!!
+    const [isAuthenticated, setIsAuthenticated] = useRecoilState(userAuthState);
+
+    const navigate = useNavigate();
 
     // signIn *실제 데이터는 백엔드에서 받아 올 것임!
     const handleSignInValue = (e) => {
@@ -32,7 +35,17 @@ export default function SignIn() {
 
         try {
             const response = await axios.post(SERVER_URL, signForm);
-            console.log('responseData', response);
+            // console.log('responseData', response);
+            const { loginSuccess } = response.data;
+
+            // 서버에서 로그인 생성 응답이 떨어지면
+            if (loginSuccess) {
+                // 서버에서 보낸 토큰을 쿠키에 저장, Auth : true
+                document.cookie = `x_auth=${response.data.token}; path=/`;
+                setIsAuthenticated(isAuthenticated.true);
+            }
+            // 로그인 성공 후 루트 경로로 이동
+            navigate('/');
         } catch (error) {
             console.log(`클라이언트에서 request 요청이 실패했습니다 ${error}`);
         }

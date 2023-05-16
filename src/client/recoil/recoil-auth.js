@@ -9,3 +9,11 @@ export const userFormState = atom({
         passwordConfirm: '',
     },
 });
+
+export const userAuthState = atom({
+    key: 'userAuthState',
+    default: {
+        true: true,
+        false: false,
+    },
+});
