@@ -16,23 +16,21 @@ const loginSchema = new Schema({
 // 비밀번호 암호화 (비크립트 라이브러리), 일종의 middleWare
 // https://www.npmjs.com/package/bcrypt
 
-loginSchema.pre('save', function (next) {
-    let user = this; // express에서 "this"는 module.exports 자체를 의미
+loginSchema.pre('save', async function (next) {
     // 1. 비밀번호 형성 시만 비크립트 형성되도록!
-    if (user.isModified('password')) {
-        // 2. salt생성 => 비밀번호 해쉬(스키마 패스워드, 솔트, 콜백함수)
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            if (err) return next(err);
-            // 3. 생성된 해쉬 DB에 저장
-            bcrypt.hash(user.password, salt, function (err, hash) {
-                if (err) return next(err);
-                user.password = hash;
-                next();
-            });
-        });
-    } else {
-        // password 항목이 아닐 시, 해당 로직 통과
+    // express에서 "this"는 module.exports 자체를 의미
+    if (!this.isModified('password')) {
+        return next();
+    }
+    // 2. salt생성 => 비밀번호 해쉬(스키마 패스워드, 솔트, 콜백함수)
+    try {
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hash = await bcrypt.hash(this.password, salt);
+        // 3. hash => 스키마 모델 정보에 저장
+        this.password = hash;
         next();
+    } catch (error) {
+        return next(error);
     }
 });
 
@@ -41,8 +39,9 @@ loginSchema.methods.comparePassword = function (
     plainPassword,
     isMatchPassword,
 ) {
+    const user = this;
     // plainPassword를 암호화 => 스키마 속 패스워드와 일치 여부 파악
-    bcrypt.compare(plainPassword, this.password, (err, isMatch) => {
+    bcrypt.compare(plainPassword, user.password, (err, isMatch) => {
         console.log(
             '입력받은비번:',
             plainPassword,

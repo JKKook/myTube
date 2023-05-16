@@ -91,7 +91,9 @@ app.post('/users/login', async (req, res) => {
                 }
             });
         }
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 app.listen(PORT, () => {
