@@ -75,6 +75,7 @@ app.post('/users/login', async (req, res) => {
                     });
                 } else {
                     // 3. 비밀번호가 일치하다면 JWT 토큰 생성
+                    res.send('로그인 성공');
                 }
             });
         }

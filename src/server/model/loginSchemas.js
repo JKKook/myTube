@@ -35,6 +35,24 @@ loginSchema.pre('save', function (next) {
     }
 });
 
+// comparePassword 메서드 생성
+loginSchema.methods.comparePassword = function (
+    plainPassword,
+    isMatchPassword,
+) {
+    // plainPassword를 암호화 => 스키마 속 패스워드와 일치 여부 파악
+    bcrypt.compare(plainPassword, this.password, (err, isMatch) => {
+        console.log(
+            '입력받은비번:',
+            plainPassword,
+            '저장된비번:',
+            this.password,
+        );
+        if (err) return isMatchPassword(err);
+        return isMatchPassword(null, isMatch);
+    });
+};
+
 // modeling
 const Logins = mongoose.model('logins', loginSchema);
 
