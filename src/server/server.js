@@ -5,10 +5,12 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const PORT = 8005;
+const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(cookieParser());
 
 // Connect Mongoose
 mongoose
@@ -60,7 +62,7 @@ app.post('/users/login', async (req, res) => {
 
         if (!isEmail) {
             return res.json({
-                loginStatus: false,
+                loginSuccess: false,
                 message: '이메일이 존재하지 않습니다',
             });
         } else {
@@ -70,12 +72,22 @@ app.post('/users/login', async (req, res) => {
                 console.log('plainPassword', req.body.password);
                 if (!isMatch) {
                     return res.json({
-                        loginStatus: false,
+                        loginSuccess: false,
                         message: '비밀번호가 일치하지 않습니다',
                     });
                 } else {
                     // 3. 비밀번호가 일치하다면 JWT 토큰 생성
-                    res.send('로그인 성공');
+                    userEmail.generateToken((err, user) => {
+                        if (err) return res.status(400).send(err);
+                        // res.send('로그인 성공');
+                        // 3-1. 토근 생성이 완료 되었다면, 토큰 쿠키에 저장  ** 로컬스토리지에 저장해도 무관 함!
+                        // 사용법은 cookie-parser 가이드에 따름
+                        res.cookie('x_auth', user.token).status(200).json({
+                            loginSuccess: true,
+                            userId: user._id,
+                        });
+                        console.log('생성된 토큰:', user.token);
+                    });
                 }
             });
         }

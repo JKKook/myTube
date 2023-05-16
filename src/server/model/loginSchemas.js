@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt'); // password 암호화 작업
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
 
 const loginSchema = new Schema({
     // _id : objectId
@@ -49,7 +50,25 @@ loginSchema.methods.comparePassword = function (
             this.password,
         );
         if (err) return isMatchPassword(err);
+        // 에러가 없으면 isMatch를 true
         return isMatchPassword(null, isMatch);
+    });
+};
+
+// JWT
+loginSchema.methods.generateToken = function (isGenerateToken) {
+    let user = this;
+    console.log('user_id', user._id); // ObjectId
+
+    // 라이브러리 가이드
+    // 1.ObjectId 한 단계 감싸기 => toHexString()
+    const token = jwt.sign(user._id.toHexString(), 'secretToken');
+    // 2. 스키마 모델의 토큰 파라미터 안으로 할당
+    user.token = token;
+    // 3. 현재 값 user 변수에 저장
+    user.save(function (err, user) {
+        if (err) return isGenerateToken(err);
+        isGenerateToken(null, user); // token 생성
     });
 };
 
