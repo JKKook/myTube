@@ -6,10 +6,11 @@ import { useRecoilState } from 'recoil';
 import { userAuthState, userFormState } from '../recoil/recoil-auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import Header from './Header';
 
 const SERVER_URL = 'http://localhost:8005/users/login';
 
-export default function SignIn() {
+export default function SignIn({ isAuth, signOut }) {
     const [signForm, setSignForm] = useRecoilState(userFormState);
     // console.log(signForm); // 나중에 디바운스 리팩터링 해야해!!
     const [isAuthenticated, setIsAuthenticated] = useRecoilState(userAuthState);
@@ -89,9 +90,23 @@ export default function SignIn() {
         return null;
     };
 
+    // signOut
+    const handleSignOut = () => {
+        const deleteToken = (cookie) => {
+            // 쿠키 만료, 현재 시점에서 1초 뺀, UTC시간 기준으로 처리(expires 관습 임)
+            const expireDate = new Date(Date.now() - 1000).toUTCString();
+            // cookie 형식이 맞게 해당 쿠키를 찾아서, 만료 일을 넣어 줌
+            document.cookie = `${cookie}=; expires=${expireDate}; path=/`;
+            console.log('Expired cookie :', document.cookie);
+        };
+        deleteToken('x_auth');
+        setIsAuthenticated(isAuthenticated.false);
+        // navigate('/');
+    };
+
     return (
         <>
-            {isAuthenticated === false ? (
+            {isAuthenticated === undefined ? (
                 <div className='flex flex-col justify-center items-center h-[80vh]'>
                     <div className='relative translate-x-[-100%] m-10'>
                         <h2 className='mb-4 text-3xl font-bold'>로그인</h2>
@@ -166,11 +181,17 @@ export default function SignIn() {
                     </form>
                 </div>
             ) : (
-                <div className='flex flex-col justify-center items-center h-[80vh]'>
-                    <h1 className='text-2xl text-gray-500'>
-                        로그인 된 상태입니다
-                    </h1>
-                </div>
+                <>
+                    <div className='hidden'>
+                        <Header
+                            isAuth={isAuthenticated}
+                            SignOut={handleSignOut}
+                        />
+                    </div>
+                    <div>
+                        <button onClick={handleSignOut}>로그아웃</button>
+                    </div>
+                </>
             )}
         </>
     );
