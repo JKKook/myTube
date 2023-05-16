@@ -66,6 +66,7 @@ export default function SignIn() {
 
     const getCookie = (name) => {
         const cookieString = document.cookie;
+        console.log('docuemnt.cookie :', cookieString);
         // document.cookie에서 받아온 전체 쿠키 문자열을 세미콜론을 기준으로 분리하여 배열 만듦.
         const cookies = cookieString.split(';'); // ["cookie1=value1", " cookie2=value2", " cookie3=value3"]
         console.log('cookies:', cookies);
@@ -73,9 +74,10 @@ export default function SignIn() {
         // * forloop을 사용한 이유, 1.return문을 사용해서 루프 중지 / 2."i" 값 직접적으로 제어 (고차함수는 순차적으로 진행되기에 직접제어는 불가)
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            console.log('cookie:', cookie);
+            console.log('cookie:', cookies[i]);
             // cookie의 이름과 name이 일치 유무 파악
             if (cookie.startsWith(name + '=')) {
+                console.log('쿠키접두사', cookie.startsWith(name + '='));
                 // 일치하는 쿠키를 찾으면 추출해서 반환
                 // name의 길이 다음부터 쿠키의 끝까지의 문자열 추출
                 // * 여기서 name.length + 1은 "name="을 건너뛰기 위한 값
@@ -89,80 +91,87 @@ export default function SignIn() {
 
     return (
         <>
-            {/* {token} */}
-            <div className='flex flex-col justify-center items-center h-[80vh]'>
-                <div className='relative translate-x-[-100%] m-10'>
-                    <h2 className='mb-4 text-3xl font-bold'>로그인</h2>
-                    <em className='text-xl'>마이튜브 계속 이동</em>
+            {isAuthenticated === false ? (
+                <div className='flex flex-col justify-center items-center h-[80vh]'>
+                    <div className='relative translate-x-[-100%] m-10'>
+                        <h2 className='mb-4 text-3xl font-bold'>로그인</h2>
+                        <em className='text-xl'>마이튜브 계속 이동</em>
+                    </div>
+                    <form
+                        action='/users/login'
+                        method='POST'
+                        className='max-w-[500px] bg-gray-200 p-8 rounded shadow-md w-7/12 '
+                        onSubmit={handleSignInSubmit}
+                    >
+                        <div className='mb-4'>
+                            <label
+                                htmlFor='email'
+                                className='block text-gray-700 font-semibold mb-2'
+                            >
+                                E-mail:
+                            </label>
+                            <input
+                                type='email'
+                                id='email'
+                                name='email'
+                                className='w-full py-2 px-4 border border-gray-300 text-gray-700 rounded focus:outline-none focus:border-indigo-500'
+                                value={signForm.email}
+                                onChange={handleSignInValue}
+                            />
+                        </div>
+                        <div className='mb-4'>
+                            <label
+                                htmlFor='password'
+                                className='block text-gray-700 font-semibold mb-2'
+                            >
+                                Password:
+                            </label>
+                            <input
+                                type='password'
+                                id='password'
+                                name='password'
+                                className='w-full py-2 px-4 border border-gray-300 text-gray-900 rounded focus:outline-none focus:border-indigo-500'
+                                value={signForm.password}
+                                onChange={handleSignInValue}
+                            />
+                        </div>
+                        <div>
+                            <p className='text-gray-700 font-semibold mt-8 mb-2 '>
+                                소셜 로그인
+                            </p>
+                            <button className='p-4 text-2xl bg-red-500 rounded mr-4 transform hover:scale-105 transition duration-300'>
+                                <BsGoogle />
+                            </button>
+                            <button className='p-4 text-2xl bg-gray-500 rounded transform hover:scale-105 transition duration-300'>
+                                <BsGithub />
+                            </button>
+                        </div>
+                        <div className='flex justify-end'>
+                            <button
+                                type='submit'
+                                className='mt-12 bg-indigo-500 font-bold text-white py-2 px-4 rounded hover:bg-indigo-600'
+                            >
+                                시작하기
+                            </button>
+                        </div>
+                        <div className='text-gray-800'>
+                            <span>이용이 처음이신가요?</span>
+                            {/* register routing */}
+                            <Link to='/users/register'>
+                                <span className='ml-2 cursor-pointer font-semibold text-indigo-900 hover:text-gray-600'>
+                                    처음 시작하기
+                                </span>
+                            </Link>
+                        </div>
+                    </form>
                 </div>
-                <form
-                    action='/users/login'
-                    method='POST'
-                    className='max-w-[500px] bg-gray-200 p-8 rounded shadow-md w-7/12 '
-                    onSubmit={handleSignInSubmit}
-                >
-                    <div className='mb-4'>
-                        <label
-                            htmlFor='email'
-                            className='block text-gray-700 font-semibold mb-2'
-                        >
-                            E-mail:
-                        </label>
-                        <input
-                            type='email'
-                            id='email'
-                            name='email'
-                            className='w-full py-2 px-4 border border-gray-300 text-gray-700 rounded focus:outline-none focus:border-indigo-500'
-                            value={signForm.email}
-                            onChange={handleSignInValue}
-                        />
-                    </div>
-                    <div className='mb-4'>
-                        <label
-                            htmlFor='password'
-                            className='block text-gray-700 font-semibold mb-2'
-                        >
-                            Password:
-                        </label>
-                        <input
-                            type='password'
-                            id='password'
-                            name='password'
-                            className='w-full py-2 px-4 border border-gray-300 text-gray-900 rounded focus:outline-none focus:border-indigo-500'
-                            value={signForm.password}
-                            onChange={handleSignInValue}
-                        />
-                    </div>
-                    <div>
-                        <p className='text-gray-700 font-semibold mt-8 mb-2 '>
-                            소셜 로그인
-                        </p>
-                        <button className='p-4 text-2xl bg-red-500 rounded mr-4 transform hover:scale-105 transition duration-300'>
-                            <BsGoogle />
-                        </button>
-                        <button className='p-4 text-2xl bg-gray-500 rounded transform hover:scale-105 transition duration-300'>
-                            <BsGithub />
-                        </button>
-                    </div>
-                    <div className='flex justify-end'>
-                        <button
-                            type='submit'
-                            className='mt-12 bg-indigo-500 font-bold text-white py-2 px-4 rounded hover:bg-indigo-600'
-                        >
-                            시작하기
-                        </button>
-                    </div>
-                    <div className='text-gray-800'>
-                        <span>이용이 처음이신가요?</span>
-                        {/* register routing */}
-                        <Link to='/users/register'>
-                            <span className='ml-2 cursor-pointer font-semibold text-indigo-900 hover:text-gray-600'>
-                                처음 시작하기
-                            </span>
-                        </Link>
-                    </div>
-                </form>
-            </div>
+            ) : (
+                <div className='flex flex-col justify-center items-center h-[80vh]'>
+                    <h1 className='text-2xl text-gray-500'>
+                        로그인 된 상태입니다
+                    </h1>
+                </div>
+            )}
         </>
     );
 }
