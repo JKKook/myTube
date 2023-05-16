@@ -4,6 +4,7 @@ import React from 'react';
 import { BsGoogle, BsGithub } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
 import { userFormState } from '../recoil/recoil-auth';
+import { Link } from 'react-router-dom';
 
 const SERVER_URL = 'http://localhost:8005/users/login';
 
@@ -29,14 +30,8 @@ export default function SignIn() {
     const handleSignInSubmit = async (e) => {
         e.preventDefault();
 
-        const requestData = {
-            // model에 들어가기 때문에 변수 값을 동일하게 맞춰야 함!
-            email: signForm.email,
-            password: signForm.password,
-        };
-
         try {
-            const response = await axios.post(SERVER_URL, requestData);
+            const response = await axios.post(SERVER_URL, signForm);
             console.log('responseData', response);
         } catch (error) {
             console.log(`클라이언트에서 request 요청이 실패했습니다 ${error}`);
@@ -112,9 +107,11 @@ export default function SignIn() {
                     <div className='text-gray-800'>
                         <span>이용이 처음이신가요?</span>
                         {/* register routing */}
-                        <span className='ml-2 cursor-pointer font-semibold text-indigo-900 hover:text-gray-600'>
-                            처음 시작하기
-                        </span>
+                        <Link to='/users/register'>
+                            <span className='ml-2 cursor-pointer font-semibold text-indigo-900 hover:text-gray-600'>
+                                처음 시작하기
+                            </span>
+                        </Link>
                     </div>
                 </form>
             </div>

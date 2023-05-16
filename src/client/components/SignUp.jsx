@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { userFormState } from '../recoil/recoil-auth';
+import { Link } from 'react-router-dom';
 
 const SERVER_URL = 'http://localhost:8005/users/register';
 
@@ -126,9 +127,11 @@ export default function SignUp() {
                     <div className='text-gray-800'>
                         <span>ID가 이미 있으신가요?</span>
                         {/* register routing */}
-                        <span className='ml-2 cursor-pointer font-semibold text-indigo-900 hover:text-gray-600'>
-                            로그인 하러가기
-                        </span>
+                        <Link to='/users/login'>
+                            <span className='ml-2 cursor-pointer font-semibold text-indigo-900 hover:text-gray-600'>
+                                로그인 하러가기
+                            </span>
+                        </Link>
                     </div>
                 </form>
             </div>
