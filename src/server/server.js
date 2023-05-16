@@ -85,6 +85,7 @@ app.post('/users/login', async (req, res) => {
                         res.cookie('x_auth', user.token).status(200).json({
                             loginSuccess: true,
                             userId: user._id,
+                            token: user.token,
                         });
                         console.log('생성된 토큰:', user.token);
                     });
