@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React from 'react';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { BsGoogle, BsGithub } from 'react-icons/bs';
+import { useRecoilState } from 'recoil';
+import { userFormState } from '../recoil/recoil-auth';
 
-const SERVER_URL = 'http://localhost:8005/login';
+const SERVER_URL = 'http://localhost:8005/users/login';
 
 export default function SignIn() {
-    const [signForm, setSignForm] = useState({ email: '', password: '' });
+    const [signForm, setSignForm] = useRecoilState(userFormState);
     // console.log(signForm); // 나중에 디바운스 리팩터링 해야해!!
 
     // signIn *실제 데이터는 백엔드에서 받아 올 것임!

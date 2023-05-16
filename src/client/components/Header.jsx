@@ -46,7 +46,7 @@ export default function Header() {
                         <BsSearch />
                     </button>
                 </div>
-                <Link to='/login'>
+                <Link to='/users/login'>
                     <div className='flex flex-col text-3xl'>
                         <button>
                             <AiOutlineUser />

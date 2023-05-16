@@ -1,6 +1,10 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
+import { userFormState } from '../recoil/recoil-auth';
 
-export default function Register() {
+export default function SignUp() {
+    const [registerForm, setRegisterForm] = useRecoilState(userFormState);
+
     return (
         <>
             <div className='flex flex-col justify-center items-center h-[80vh]'>
@@ -66,15 +70,15 @@ export default function Register() {
                     </div>
                     <div className='mb-4'>
                         <label
-                            htmlFor='rePassword'
+                            htmlFor='passwordConfirm'
                             className='block text-gray-700 font-semibold mb-2'
                         >
                             Password 재확인:
                         </label>
                         <input
                             type='password'
-                            id='rePassword'
-                            name='rePassword'
+                            id='passwordConfirm'
+                            name='passwordConfirm'
                             className='w-full py-2 px-4 border border-gray-300 text-gray-900 rounded focus:outline-none focus:border-indigo-500'
                             // value={signForm.password}
                             // onChange={handleSignInValue}
