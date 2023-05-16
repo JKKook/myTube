@@ -1,9 +1,39 @@
+import axios from 'axios';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { userFormState } from '../recoil/recoil-auth';
 
+const SERVER_URL = 'http://localhost:8005/users/register';
+
 export default function SignUp() {
     const [registerForm, setRegisterForm] = useRecoilState(userFormState);
+
+    const handleSignUpValue = (e) => {
+        const { name, value } = e.target;
+
+        setRegisterForm((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSignUpSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post(SERVER_URL, registerForm);
+            console.log('registerRes', response);
+        } catch (error) {
+            console.log(`클라이언트에서 request 요청이 실패했습니다 ${error}`);
+        }
+
+        setRegisterForm({
+            nickName: '',
+            email: '',
+            password: '',
+            passwordConfirm: '',
+        });
+    };
 
     return (
         <>
@@ -18,7 +48,7 @@ export default function SignUp() {
                     action='/users/register'
                     method='POST'
                     className='max-w-[500px] bg-gray-200 p-8 rounded shadow-md w-7/12 '
-                    // onSubmit={}
+                    onSubmit={handleSignUpSubmit}
                 >
                     <div className='mb-4'>
                         <label
@@ -32,8 +62,8 @@ export default function SignUp() {
                             id='nickName'
                             name='nickName'
                             className='w-full py-2 px-4 border border-gray-300 text-gray-700 rounded focus:outline-none focus:border-indigo-500'
-                            // value={signForm.email}
-                            // onChange={handleSignInValue}
+                            value={registerForm.nickName}
+                            onChange={handleSignUpValue}
                         />
                     </div>
                     <div className='mb-4'>
@@ -48,8 +78,8 @@ export default function SignUp() {
                             id='email'
                             name='email'
                             className='w-full py-2 px-4 border border-gray-300 text-gray-700 rounded focus:outline-none focus:border-indigo-500'
-                            // value={signForm.email}
-                            // onChange={handleSignInValue}
+                            value={registerForm.email}
+                            onChange={handleSignUpValue}
                         />
                     </div>
                     <div className='mb-4'>
@@ -64,8 +94,8 @@ export default function SignUp() {
                             id='password'
                             name='password'
                             className='w-full py-2 px-4 border border-gray-300 text-gray-900 rounded focus:outline-none focus:border-indigo-500'
-                            // value={signForm.password}
-                            // onChange={handleSignInValue}
+                            value={registerForm.password}
+                            onChange={handleSignUpValue}
                         />
                     </div>
                     <div className='mb-4'>
@@ -80,8 +110,8 @@ export default function SignUp() {
                             id='passwordConfirm'
                             name='passwordConfirm'
                             className='w-full py-2 px-4 border border-gray-300 text-gray-900 rounded focus:outline-none focus:border-indigo-500'
-                            // value={signForm.password}
-                            // onChange={handleSignInValue}
+                            value={registerForm.passwordConfirm}
+                            onChange={handleSignUpValue}
                         />
                     </div>
 
