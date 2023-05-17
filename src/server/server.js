@@ -29,6 +29,7 @@ mongoose
 
 // import Schemas
 const { Logins } = require('./model/loginSchemas');
+const { isLoggedIn } = require('./middleware/auth');
 
 // POST 회원가입 페이지
 app.post('/users/register', async (req, res) => {
@@ -108,6 +109,16 @@ app.get('/users/logout', (req, res) => {
         path: '/', // 쿠키가 유효한 경로 설정
     });
     res.status(200).send('로그아웃 했습니다');
+});
+
+// Authentication
+app.get('/users/auth', isLoggedIn, (req, res) => {
+    res.status(200).json({
+        _id: req.user._id, // isLoggedIn에서 user파라미터 값 규정
+        isAuth: true,
+        email: req.user.email,
+        nickName: req.user.name || undefined,
+    });
 });
 
 app.listen(PORT, () => {
