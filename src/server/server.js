@@ -68,7 +68,7 @@ app.post('/users/login', async (req, res) => {
         } else {
             // 2. 이메일을 데이터베이스에서 찾았다면 비밀번호 비교
             // 스키마 모델에서 비밀번호 비교 메서드 생성하자
-            userEmail.comparePassword(+req.body.password, (isMatch) => {
+            userEmail.comparePassword(req.body.password, (isMatch) => {
                 console.log('plainPassword', req.body.password);
                 if (!isMatch) {
                     return res.json({
@@ -95,6 +95,19 @@ app.post('/users/login', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+});
+
+// 로그아웃
+app.get('/users/logout', (req, res) => {
+    // DB에서 토큰을 만료 시킬 것임
+    console.log(req.body);
+    const expireDate = new Date(Date.now() - 1000).toUTCString();
+    res.cookie('x_auth', '', {
+        expires: expireDate,
+        httpOnly: true, // client에서 쿠키 조작할 수 없도록
+        path: '/', // 쿠키가 유효한 경로 설정
+    });
+    res.status(200).send('로그아웃 했습니다');
 });
 
 app.listen(PORT, () => {

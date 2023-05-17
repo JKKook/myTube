@@ -10,7 +10,7 @@ import Header from './Header';
 
 const SERVER_URL = 'http://localhost:8005/users/login';
 
-export default function SignIn({ isAuth, signOut }) {
+export default function SignIn() {
     const [signForm, setSignForm] = useRecoilState(userFormState);
     // console.log(signForm); // 나중에 디바운스 리팩터링 해야해!!
     const [isAuthenticated, setIsAuthenticated] = useRecoilState(userAuthState);
@@ -101,7 +101,7 @@ export default function SignIn({ isAuth, signOut }) {
         };
         deleteToken('x_auth');
         setIsAuthenticated(isAuthenticated.false);
-        // navigate('/');
+        // navigate('/users/logout');
     };
 
     return (

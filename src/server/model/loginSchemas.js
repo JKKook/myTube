@@ -39,9 +39,8 @@ loginSchema.methods.comparePassword = function (
     plainPassword,
     isMatchPassword,
 ) {
-    const user = this;
     // plainPassword를 암호화 => 스키마 속 패스워드와 일치 여부 파악
-    bcrypt.compare(plainPassword, user.password, (err, isMatch) => {
+    bcrypt.compare(plainPassword, this.password, (err, isMatch) => {
         console.log(
             '입력받은비번:',
             plainPassword,
