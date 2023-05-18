@@ -69,29 +69,32 @@ app.post('/users/login', async (req, res) => {
         } else {
             // 2. 이메일을 데이터베이스에서 찾았다면 비밀번호 비교
             // 스키마 모델에서 비밀번호 비교 메서드 생성하자
-            userEmail.comparePassword(req.body.password, (isMatch) => {
-                console.log('plainPassword', req.body.password);
-                if (!isMatch) {
-                    return res.json({
-                        loginSuccess: false,
-                        message: '비밀번호가 일치하지 않습니다',
-                    });
-                } else {
-                    // 3. 비밀번호가 일치하다면 JWT 토큰 생성
-                    userEmail.generateToken((err, user) => {
-                        if (err) return res.status(400).send(err);
-                        // res.send('로그인 성공');
-                        // 3-1. 토근 생성이 완료 되었다면, 토큰 쿠키에 저장  ** 로컬스토리지에 저장해도 무관 함!
-                        // 사용법은 cookie-parser 가이드에 따름
-                        res.cookie('x_auth', user.token).status(200).json({
-                            loginSuccess: true,
-                            userId: user._id,
-                            token: user.token,
+            userEmail.comparePassword(
+                parseInt(req.body.password),
+                (isMatch) => {
+                    console.log('plainPassword', req.body.password);
+                    if (!isMatch) {
+                        return res.json({
+                            loginSuccess: false,
+                            message: '비밀번호가 일치하지 않습니다',
                         });
-                        console.log('생성된 토큰:', user.token);
-                    });
-                }
-            });
+                    } else {
+                        // 3. 비밀번호가 일치하다면 JWT 토큰 생성
+                        userEmail.generateToken((err, user) => {
+                            if (err) return res.status(400).send(err);
+                            // res.send('로그인 성공');
+                            // 3-1. 토근 생성이 완료 되었다면, 토큰 쿠키에 저장  ** 로컬스토리지에 저장해도 무관 함!
+                            // 사용법은 cookie-parser 가이드에 따름
+                            res.cookie('x_auth', user.token).status(200).json({
+                                loginSuccess: true,
+                                userId: user._id,
+                                token: user.token,
+                            });
+                            console.log('생성된 토큰:', user.token);
+                        });
+                    }
+                },
+            );
         }
     } catch (error) {
         console.log(error);
@@ -99,16 +102,22 @@ app.post('/users/login', async (req, res) => {
 });
 
 // 로그아웃
-app.get('/users/logout', (req, res) => {
+app.get('/users/logout', isLoggedIn, (req, res) => {
     // DB에서 토큰을 만료 시킬 것임
-    console.log(req.body);
-    const expireDate = new Date(Date.now() - 1000).toUTCString();
-    res.cookie('x_auth', '', {
-        expires: expireDate,
-        httpOnly: true, // client에서 쿠키 조작할 수 없도록
-        path: '/', // 쿠키가 유효한 경로 설정
-    });
-    res.status(200).send('로그아웃 했습니다');
+    Logins.findOneAndUpdate(
+        { _id: req.user._id },
+        { token: '' },
+        (err, user) => {
+            if (err)
+                return res.json({
+                    success: false,
+                    err: '로그아웃에 문제가 발생했어요',
+                });
+            return res.status(200).send({
+                logoutSuccess: true,
+            });
+        },
+    );
 });
 
 // Authentication

@@ -2,12 +2,14 @@ import axios from 'axios';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { userFormState } from '../recoil/recoil-auth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SERVER_URL = 'http://localhost:8005/users/register';
 
 export default function SignUp() {
     const [registerForm, setRegisterForm] = useRecoilState(userFormState);
+
+    const navigate = useNavigate();
 
     const handleSignUpValue = (e) => {
         const { name, value } = e.target;
@@ -34,6 +36,8 @@ export default function SignUp() {
             password: '',
             passwordConfirm: '',
         });
+
+        navigate('/users/login');
     };
 
     return (

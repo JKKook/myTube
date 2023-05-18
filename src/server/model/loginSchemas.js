@@ -70,6 +70,24 @@ loginSchema.methods.generateToken = function (isGenerateToken) {
     });
 };
 
+// findByToken 매서드 생성
+// methods.생성함수 (인스턴스 접근) vs static.생성함수의 차이 (클래스 레벨 접근)
+// class level로 만들어서 인스턴스레벨에서 접근 못하도록 접근 제어!
+loginSchema.statics.findByToken = function (token, callback) {
+    let user = this;
+    // Decoded Token
+    // 1. Verify
+    jwt.verify(token, 'secretToken', function (err, decoded) {
+        // 유저 아이디를 이용해서 유저를 찾은 다음
+        // 클라이언트에서 가져온 토큰과 DB에 보관 된 토큰이 일치하는지 확인
+        user.findOne({ _id: decoded, token: token }, function (err, user) {
+            if (err) return callback(err);
+            callback(null, user); // 디코드가 성공적으로 되었다면 콜백함수에 결과 값 넣어 줌
+            console.log('디코드 이후 user데이터', user);
+        });
+    });
+};
+
 // modeling
 const Logins = mongoose.model('logins', loginSchema);
 

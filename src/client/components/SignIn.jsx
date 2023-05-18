@@ -3,17 +3,19 @@ import React from 'react';
 // import { useState } from 'react';
 import { BsGoogle, BsGithub } from 'react-icons/bs';
 import { useRecoilState } from 'recoil';
-import { userAuthState, userFormState } from '../recoil/recoil-auth';
+import { userFormState } from '../recoil/recoil-auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Header from './Header';
+import { useState } from 'react';
 
 const SERVER_URL = 'http://localhost:8005/users/login';
 
 export default function SignIn() {
     const [signForm, setSignForm] = useRecoilState(userFormState);
     // console.log(signForm); // 나중에 디바운스 리팩터링 해야해!!
-    const [isAuthenticated, setIsAuthenticated] = useRecoilState(userAuthState);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    console.log(isAuthenticated);
 
     const navigate = useNavigate();
 
@@ -45,7 +47,7 @@ export default function SignIn() {
                 // 서버에서 보낸 토큰을 쿠키에 저장, Auth : true
                 document.cookie = `x_auth=${response.data.token}; path=/`;
                 console.log('서버에서 받아온 토큰 값:', response.data.token);
-                setIsAuthenticated(isAuthenticated.true);
+                setIsAuthenticated(true);
             }
             // 로그인 성공 후 루트 경로로 이동
             navigate('/');
@@ -58,11 +60,17 @@ export default function SignIn() {
 
     // 로그인 상태 유지
     useEffect(() => {
-        const token = getCookie('x_auth'); // cookie에서 토큰 가져오기
-        console.log('TOKEN:', token);
-        if (token) {
-            setIsAuthenticated(isAuthenticated.true);
-        }
+        const isLoggedIn = async () => {
+            try {
+                isAuthenticated
+                    ? setIsAuthenticated(true)
+                    : setIsAuthenticated(false);
+            } catch (error) {
+                console.log('로그인 상태유지에 에러가 있습니다', error);
+            }
+        };
+
+        isLoggedIn();
     }, []);
 
     const getCookie = (name) => {
@@ -92,21 +100,16 @@ export default function SignIn() {
 
     // signOut
     const handleSignOut = () => {
-        const deleteToken = (cookie) => {
-            // 쿠키 만료, 현재 시점에서 1초 뺀, UTC시간 기준으로 처리(expires 관습 임)
-            const expireDate = new Date(Date.now() - 1000).toUTCString();
-            // cookie 형식이 맞게 해당 쿠키를 찾아서, 만료 일을 넣어 줌
-            document.cookie = `${cookie}=; expires=${expireDate}; path=/`;
-            console.log('Expired cookie :', document.cookie);
-        };
-        deleteToken('x_auth');
-        setIsAuthenticated(isAuthenticated.false);
-        // navigate('/users/logout');
+        axios.get('http://localhost:8005/users/logout').then((response) => {
+            console.log(response.data.logoutSuccess);
+            setIsAuthenticated(false);
+            // navigate('/');
+        });
     };
 
     return (
         <>
-            {isAuthenticated === undefined ? (
+            {!isAuthenticated ? (
                 <div className='flex flex-col justify-center items-center h-[80vh]'>
                     <div className='relative translate-x-[-100%] m-10'>
                         <h2 className='mb-4 text-3xl font-bold'>로그인</h2>
